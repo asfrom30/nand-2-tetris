@@ -1,0 +1,7 @@
+CHIP Xor {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    
+}

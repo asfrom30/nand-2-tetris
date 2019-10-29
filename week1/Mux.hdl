@@ -1,0 +1,21 @@
+// !abc + a!b!c + ab!c + abc
+// = (!ab+ab)c + (a!b + ab)!c
+// = (!a+a)bc + (!b+b)a!c
+// = bc + a!c
+
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS: 
+    Nand(a=b, b=sel, out=bNandSel);
+    Nand(a=bNandSel, b=bNandSel, out=bAndSel);
+    
+    Nand(a=sel, b=sel, out=notSel);
+    Nand(a=a, b=notSel, out=aNandNotSel);
+    Nand(a=aNandNotSel, b=aNandNotSel, out=aAndNotSel);
+
+    Nand(a=bAndSel, b=bAndSel, out=outA);
+    Nand(a=aAndNotSel, b=aAndNotSel, out=outB);
+    Nand(a=outA, b=outB, out=out);
+}

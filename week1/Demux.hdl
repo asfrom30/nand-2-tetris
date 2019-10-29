@@ -1,0 +1,7 @@
+CHIP Demux {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    
+}
