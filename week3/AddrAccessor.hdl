@@ -1,0 +1,15 @@
+CHIP AddrAccessor {
+    IN in[3];
+    OUT out[8];
+
+    PARTS:
+        DMux(in=true, sel=in[0], a=out1a, b=out1b);
+
+        DMux(in=out1a, sel=in[1], a=out21a, b=out21b);
+        DMux(in=out1b, sel=in[1], a=out22a, b=out22b);
+
+        DMux(in=out21a, sel=in[2], a=out[0], b=out[4]);
+        DMux(in=out21b, sel=in[2], a=out[2], b=out[6]);
+        DMux(in=out22a, sel=in[2], a=out[1], b=out[5]);
+        DMux(in=out22b, sel=in[2], a=out[3], b=out[7]);
+}
