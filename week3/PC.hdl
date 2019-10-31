@@ -18,7 +18,7 @@ CHIP PC {
     PARTS:
         Mux16(a=incRegOut, b=in, sel=load, out=selectedOut);
         Mux16(a=selectedOut, b[0..15]=false, sel=reset, out=regIn);
-        // Add16(a=regOut, b[0..14]=false, b[15]=true, out=incRegOut);
-        Inc16(in=regOut, out=incRegOut);
+        Add16(a=regOut, b[0]=inc, b[1..15]=false, out=incRegOut); // b[0..14]=false, b[15]=inc
+        // Inc16(in=regOut, out=incRegOut);
         Register(in=regIn, load=true, out=out, out=regOut);
 }
