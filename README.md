@@ -1,13 +1,13 @@
 # 시작이유
 
 # Week1
-[source code](./week1);
+[week1 source code](./week1)
 
 ![alt](resources/week1-1.jpg)
 
 
 # Week3
-
+[week1 source code](./week3)
 
 # 고찰
 
@@ -84,10 +84,3 @@ Mux4Way16(out[0..15]=a[0..15], out[15]=b ,out[15]=c, out=d);
 ```hdl
 Add16(a=in,b[0]=true,b[1..15]=false,out=out);
 ```
-
-
-# 정리
-
-순차칩, 조합칩
-
-래치
