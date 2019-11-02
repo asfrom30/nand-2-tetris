@@ -7,7 +7,7 @@
 
 
 # Week3
-[week1 source code](./week3)
+[week3 source code](./week3)
 
 # 고찰
 
