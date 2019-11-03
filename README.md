@@ -1,13 +1,28 @@
-# 시작이유
+# Bifrost between Digital and code
 
-# Week1
-[week1 source code](./week1)
+![alt](resources/Bifrost.jpeg)
+
+### 시작이유
+작성중...
+
+# 용어집
+* 조합칩, 순차칩
+* 래치
+
+# 프로젝트 솔루션
+## Week1
+* [week1 source code](./week1)
 
 ![alt](resources/week1-1.jpg)
 
 
-# Week3
-[week3 source code](./week3)
+## Week3
+
+* [week3 source code](./week3)
+
+![alt](resources/week3-1.jpg)
+![alt](resources/week3-2.jpg)
+
 
 # 고찰
 
@@ -67,20 +82,25 @@ UML이 필요한 경우가 이런 경우가 아닐까? 물론 어떤 경우는 �
 
 ## Week3
 
+PC같은 경우에는 생각을 잘했다기 보다는, 포기(?)하고 자려는데(load를 클럭에 맞춰서 넣어야 하나라는 이상한 생각에 빠져 있었다.). 그러다가 레지스터를 왜 하나 가지고 해결하려 했지? 두개를 써도 되잖아 하나는 아에 읽기 레지스터 하나는 아에 레지스터로 놓으면 되겠네라고 생각해서 `load=true`로 놓고 그리다 보니까. 아 어차피 플립플롭 때문에 클럭 내에서 읽기 쓰기가 다 이루어지는구나 해서 풀었다. 걍 의식으 흐름대로 풀어서, 실력이 아니라 우연히 풀은 것 같다.
+
+실패가 아니라 실수했던 것은 inc를 무조건 1로 설정하려고 `[0..14]=false, [15]=true`로 설정했다는 점. `[0..14]=false, [15]=inc`로 해야한다.
+
+또 최상위 비트와 최하위 비트를 햇갈려서 오버플로우가 일어났다는점. 따라서 `[0..14]=false, [15]=inc`가 아니라 `[0]=inc, [1..15]=false`로 해야한다.
 
 # Tip and Trick
 ### Run Hardware Simulator
 ```bash
 nand2tetris/tools/HardwareSimulator.sh
 ```
-
-# split out
+## HDL Syntax
+### split out
 
 ```hdl
 Mux4Way16(out[0..15]=a[0..15], out[15]=b ,out[15]=c, out=d);
 ```
 
-# split in
+### split in
 ```hdl
 Add16(a=in,b[0]=true,b[1..15]=false,out=out);
 ```
