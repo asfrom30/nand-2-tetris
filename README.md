@@ -5,6 +5,11 @@
 ### 시작이유
 작성중...
 
+### Resources
+* https://www.nand2tetris.org/
+* https://www.coursera.org/learn/build-a-computer/home/welcome
+
+
 # 용어집
 * 조합칩, 순차칩
 * 래치
