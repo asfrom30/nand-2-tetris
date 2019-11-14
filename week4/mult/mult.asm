@@ -17,9 +17,13 @@
 
 (LOOP)
 @R1
-D=M
+MD=M-1
 
-D=D-1
+@END
+D;JLT
+
+@LOOP
+0;JMP
 
 (END)
 @END
