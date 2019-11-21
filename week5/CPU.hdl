@@ -16,8 +16,11 @@ CHIP CPU {
         // jmpFlag
         // jmpAddress[0]=
         // jmpAddress[1..15]=
-        Or(a=instruction[15], b=true, out=isAInstruction);
-        Not(in=isAInstruction, out=isCInstruction, out=isEInstruction);
+        Or(a=instruction[15], b=false, out=isCInstruction);
+        Not(in=isCInstruction, out=isAInstruction);
+
+        // Decoder
+        // isCInstruction
 
         // a
         // c[0..5]
@@ -30,10 +33,12 @@ CHIP CPU {
         // CInstructionParser
 
         // aRegister
-        // ARegister(in=, load=isAInstruction, out=a_register_out);
+        // in=, load=isAInstruction, 
+        ARegister(in[0..14]=instruction[0..14], load=isAInstruction, out=ARegisterOut);
 
-        // // dRegister
-        // DRegister(in=, load=, out=d_register_out);
+        // dRegister
+        // in=, load=, 
+        DRegister(out=DRegisterOut);
 
         // // A/M Selector
         // Mux16(a=a_register_out, b=inM, sel=sel_a_or_m, out=a_m_register_out);
@@ -43,7 +48,5 @@ CHIP CPU {
         ALU(out=aluResult);
 
         Not(in=jmpFlag, out=notJmpFlag);
-        // how to fetch jmpAddress.
-        // in=jmpAddress, 
-        PC(load=jmpFlag, inc=notJmpFlag, reset=reset, out[1..15]=pc);
+        PC(in=ARegisterOut, load=jmpFlag, inc=notJmpFlag, reset=reset, out[1..15]=pc);
 }
