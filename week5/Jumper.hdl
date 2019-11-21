@@ -1,0 +1,24 @@
+CHIP Jumper {
+  IN in[16], j[3];
+  OUT jmpFlag;
+
+  PARTS: 
+    Or8Way(in=in[0..7], out=outA);
+    Or8Way(in[0..6]=in[8..14], in[7]=false, out=outB);
+    Or(a=outA, b=outB, out=atLeastOne);
+    Not(in=atLeastOne, out=notAtLeastOne);
+    Not(in=in[15], out=notMsb);
+
+    Or(a=in[15], b=false, out=minus);
+    And(a=notMsb, b=notAtLeastOne, out=zero);
+    And(a=atLeastOne, b=notMsb, out=plus);
+
+    And(a=j[0], b=plus, out=j1Out);
+    And(a=j[1], b=zero, out=j2Out);
+    And(a=j[2], b=minus, out=j3Out);
+
+
+    Or(a=j1Out, b=j2Out, out=tempOut);
+    Or(a=tempOut, b=j3Out, out=jmpFlag);
+
+}

@@ -1,30 +1,4 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/05/CPU.hdl
-
-/**
- * The Hack CPU (Central Processing unit), consisting of an ALU,
- * two registers named A and D, and a program counter named PC.
- * The CPU is designed to fetch and execute instructions written in 
- * the Hack machine language. In particular, functions as follows:
- * Executes the inputted instruction according to the Hack machine 
- * language specification. The D and A in the language specification
- * refer to CPU-resident registers, while M refers to the external
- * memory location addressed by A, i.e. to Memory[A]. The inM input 
- * holds the value of this location. If the current instruction needs 
- * to write a value to M, the value is placed in outM, the address 
- * of the target location is placed in the addressM output, and the 
- * writeM control bit is asserted. (When writeM==0, any value may 
- * appear in outM). The outM and writeM outputs are combinational: 
- * they are affected instantaneously by the execution of the current 
- * instruction. The addressM and pc outputs are clocked: although they 
- * are affected by the execution of the current instruction, they commit 
- * to their new values only in the next time step. If reset==1 then the 
- * CPU jumps to address 0 (i.e. pc is set to 0 in next time step) rather 
- * than to the address resulting from executing the current instruction. 
- */
-
+// * 조합칩은 맘대로 쓸 수 있다는 사실..
 CHIP CPU {
 
     IN  inM[16],         // M value input  (M = contents of RAM[A])
@@ -42,24 +16,34 @@ CHIP CPU {
         // jmpFlag
         // jmpAddress[0]=
         // jmpAddress[1..15]=
+        Or(a=instruction[15], b=true, out=isAInstruction);
+        Not(in=isAInstruction, out=isCInstruction, out=isEInstruction);
 
-        Mux16(a=, b=, sel=, out=);
+        // a
+        // c[0..5]
+        // d[0..2]
+        // j[0..2]
+        Jumper(in=aluResult, j=instruction[0..2], jmpFlag=jmpFlag);
 
         // AInstructionParser
 
         // CInstructionParser
 
         // aRegister
-        ARegister(in=, load=, out=a_register_out);
+        // ARegister(in=, load=isAInstruction, out=a_register_out);
 
-        // dRegister
-        DRegister(in=, load=, out=d_register_out);
+        // // dRegister
+        // DRegister(in=, load=, out=d_register_out);
 
-        // A/M Selector
-        Mux16(a=a_register_out, b=inM, sel=sel_a_or_m, out=a_m_register_out);
+        // // A/M Selector
+        // Mux16(a=a_register_out, b=inM, sel=sel_a_or_m, out=a_m_register_out);
+        
+        //zx=, nx=, zy=, ny=, f=, no=, zr=, ng=
+        // x=dRegisterOut, y=AMRegisterOut
+        ALU(out=aluResult);
 
-        ALU(x=d_register_out, y=a_m_register_out, zx=, nx=, zy=, ny=, f=, no=, out=, zr=, ng=);
-
-        Not(in=true, out=notIsImp);
-        PC(in=jmpAddress, load=isJmp, inc=notIsImp, reset=reset, out[1..15]=pc);
+        Not(in=jmpFlag, out=notJmpFlag);
+        // how to fetch jmpAddress.
+        // in=jmpAddress, 
+        PC(load=jmpFlag, inc=notJmpFlag, reset=reset, out[1..15]=pc);
 }
