@@ -1,0 +1,8 @@
+CHIP WhereToSave {
+  IN d[3];
+  OUT saveA, saveM, saveD;
+  PARTS: 
+    Or(a=d[2], b=false, out=saveA);
+    Or(a=d[1], b=false, out=saveD);
+    Or(a=d[0], b=false, out=saveM);
+}
