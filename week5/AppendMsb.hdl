@@ -1,0 +1,12 @@
+
+CHIP AppendMsb {
+  IN  in[15],
+      msb;
+
+  OUT out[16];
+
+  PARTS:
+    Or16(a=false, b[15]=msb, b[0..14]=in, out=out);
+}
+
+       

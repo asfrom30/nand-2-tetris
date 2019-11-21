@@ -39,5 +39,5 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-        PC(in=true, load=true, inc=true, reset=reset, out[1..15]=pc);
+        PC(in=jmpAddress, load=isJmp, inc=notIsImp, reset=reset, out[0]=pc[0], out[1..15]=pc);
 }
