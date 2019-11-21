@@ -1,7 +1,0 @@
-CHIP MyPc{
-  IN in[16], jmpFlag, incFlag, reset;
-  OUT out[16];
-
-  PARTS: 
-    PC(in=in, load=jmpFlag, inc=incFlag, reset=reset, out=out);
-}
