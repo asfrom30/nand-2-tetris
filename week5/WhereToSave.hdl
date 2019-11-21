@@ -1,8 +1,13 @@
 CHIP WhereToSave {
-  IN d[3];
+  IN d[3], flag;
   OUT saveA, saveM, saveD;
   PARTS: 
-    Or(a=d[2], b=false, out=saveA);
-    Or(a=d[1], b=false, out=saveD);
-    Or(a=d[0], b=false, out=saveM);
+    Or(a=d[2], b=false, out=tempA);
+    And(a=tempA, b=flag, out=saveA);
+
+    Or(a=d[1], b=false, out=tempD);
+    And(a=tempD, b=flag, out=saveD);
+
+    Or(a=d[0], b=false, out=tempM);
+    And(a=tempM, b=flag, out=saveM);
 }

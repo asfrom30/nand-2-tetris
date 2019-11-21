@@ -13,18 +13,15 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-        // jmpFlag
-        // jmpAddress[0]=
-        // jmpAddress[1..15]=
         Or(a=instruction[15], b=false, out=isCInstruction);
         Not(in=isCInstruction, out=isAInstruction);
         
-        // prevent to execute when isAInstruction. below instruction parser executes only when isCInstruction.
+        // TODO: prevent to execute when isAInstruction. below instruction parser executes only when isCInstruction.
         Or16(a[0..2]=instruction[3..5], b=false, out[0..2]=dBits); // dBits Count = 3
         Or16(a[0..5]=instruction[6..11], b=false, out[0..5]=cBits); // cBits Count = 6
         Or(a=instruction[12], b=false, out=aBit); // aBit Count = 1
 
-        WhereToSave(d=dBits, saveA=saveA, saveD=saveD, saveM=saveM);
+        WhereToSave(d=dBits, flag=isCInstruction, saveA=saveA, saveD=saveD, saveM=saveM);
 
         // Decoder
         // isCInstruction
@@ -33,7 +30,7 @@ CHIP CPU {
         // c[0..5]
         // d[0..2]
         // j[0..2]
-        Jumper(in=aluResult, j=instruction[0..2], jmpFlag=jmpFlag);
+        Jumper(in=aluResult, j=instruction[0..2], jmpFlag=tempJmpFlag);
 
         // AInstructionParser
 
@@ -43,7 +40,8 @@ CHIP CPU {
         // in=, load=isAInstruction,
         Mux16(a[0..14]=instruction[0..14], a[15]=false, b=aluResult, sel=isCInstruction, out=aluResultOrValue);
         // in[0..14]=instruction[0..14],
-        ARegister(in=aluResultOrValue, load=saveA, out=ARegisterOut);
+        Or(a=isAInstruction, b=saveA, out=isAInstructionOrSaveA);
+        ARegister(in=aluResultOrValue, load=isAInstructionOrSaveA, out=ARegisterOut);
 
         // dRegister
         DRegister(in=aluResult, load=saveD, out=DRegisterOut);
@@ -52,8 +50,11 @@ CHIP CPU {
         // no=cBits[0], f=cBits[1], ny=cBits[2], zy=cBits[3], nx=cBits[4], zx=cBits[5],
         ALU(x=DRegisterOut, y=ARegisterOutOrInM, no=instruction[6], f=instruction[7], ny=instruction[8], zy=instruction[9], nx=instruction[10], zx=instruction[11], out=aluResult);
 
+        
+        And(a=isCInstruction, b=tempJmpFlag, out=jmpFlag);
         Not(in=jmpFlag, out=notJmpFlag);
-        PC(in=ARegisterOut, load=jmpFlag, inc=notJmpFlag, reset=reset, out[1..15]=pc);
+        Or(a=isAInstruction, b=notJmpFlag, out=incFlag);
+        PC(in=ARegisterOut, load=jmpFlag, inc=incFlag, reset=reset, out[0..14]=pc);
 
         Or(a=saveM, b=false, out=writeM);
         Or16(a=aluResult, b=false, out=outM);
