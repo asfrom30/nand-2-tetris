@@ -18,6 +18,13 @@ CHIP CPU {
         // jmpAddress[1..15]=
         Or(a=instruction[15], b=false, out=isCInstruction);
         Not(in=isCInstruction, out=isAInstruction);
+        
+        // prevent to execute when isAInstruction. below instruction parser executes only when isCInstruction.
+        Or16(a[0..2]=instruction[3..5], b=false, out[0..2]=dBits); // dBits Count = 3
+        Or16(a[0..5]=instruction[6..11], b=false, out[0..5]=cBits); // cBits Count = 6
+        Or(a=instruction[12], b=false, out=aBit); // aBit Count = 1
+
+        WhereToSave(d=dBits, saveA=saveA, saveD=saveD, saveM=saveM);
 
         // Decoder
         // isCInstruction
@@ -33,16 +40,14 @@ CHIP CPU {
         // CInstructionParser
 
         // aRegister
-        // in=, load=isAInstruction, 
-        ARegister(in[0..14]=instruction[0..14], load=isAInstruction, out=ARegisterOut);
+        // in=, load=isAInstruction,
+        Mux16(a[0..14]=instruction[0..14], a[15]=false, b=aluResult, sel=isCInstruction, out=aluResultOrValue);
+        // in[0..14]=instruction[0..14],
+        ARegister(in=aluResultOrValue, load=saveA, out=ARegisterOut);
 
         // dRegister
-        // in=, load=, 
-        DRegister(out=DRegisterOut);
+        DRegister(in=aluResult, load=saveD, out=DRegisterOut);
 
-        // // A/M Selector
-        // Mux16(a=a_register_out, b=inM, sel=sel_a_or_m, out=a_m_register_out);
-        
         //zx=, nx=, zy=, ny=, f=, no=, zr=, ng=
         // x=dRegisterOut, y=AMRegisterOut
         ALU(out=aluResult);
