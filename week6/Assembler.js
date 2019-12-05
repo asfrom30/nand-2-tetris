@@ -18,7 +18,7 @@ module.exports = class {
         bit = this.convertAtoBit(cmd);
         break;
       case "C_COMMAND":
-        bit = "111000000" + cmd;
+        bit = cmd;
         break;
       case "L_COMMAND":
         bit = "";
@@ -41,7 +41,27 @@ module.exports = class {
     return "0" + stringMask(bit, "0", totalBitLength);
   }
 
-  convertCtoBit(cmd) {}
+  convertCtoBit(cmd) {
+    const obj = this._cCommandSplitter(cmd);
+  }
+
+  _cCommandSplitter(cmd) {
+    let dest, comp, jump;
+
+    if (cmd.indexOf("=") > -1) {
+      const temps = cmd.split("=");
+      (dest = temps[0]), (cmd = temps[1]);
+    }
+
+    if (cmd.indexOf(";") > -1) {
+      const temps = cmd.split(";");
+      (comp = temps[0]), (jump = temps[1]);
+    } else {
+      comp = cmd;
+    }
+
+    return { dest, comp, jump };
+  }
 
   convert(fileDir) {
     return readFileLineByLine(fileDir).then(lines => {
