@@ -132,3 +132,5 @@ Add16(a=in,b[0]=true,b[1..15]=false,out=out);
 
 0000001111100111 999
 1110110111100000 -4640
+
+- https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html
