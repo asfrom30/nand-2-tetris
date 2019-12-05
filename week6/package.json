@@ -15,5 +15,8 @@
   },
   "mocha": {
     "spec": "tests/unit/**/*.spec.js"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2"
   }
 }
