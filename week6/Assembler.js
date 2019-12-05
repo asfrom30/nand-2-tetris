@@ -1,6 +1,7 @@
 const Parser = require("./src/Parser");
 const readFileLineByLine = require("./src/read-file-line-by-line");
 const convertDecBin = require("./src/utils/convert-dec-bin");
+const stringMask = require("./src/utils/string-mask");
 
 module.exports = class {
   /**
@@ -37,16 +38,9 @@ module.exports = class {
 
     const totalBitLength = 16;
 
-    let resBit = "0";
-
-    for (let i = 0; i < totalBitLength - bit.length - 1; i++) {
-      resBit += "0";
-    }
-
-    resBit += bit;
-
-    return resBit;
+    return "0" + stringMask(bit, "0", totalBitLength);
   }
+
   convertCtoBit(cmd) {}
 
   convert(fileDir) {
